@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Старая Кулатка — История села</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%234a5568" width="1200" height="600"/></svg>');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        header p {
+            font-size: 1.2em;
+            font-style: italic;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background: #2d3748;
+            padding: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 20px 40px;
+            background: transparent;
+            border: none;
+            color: #cbd5e0;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button:hover {
+            background: #4a5568;
+            color: white;
+        }
+
+        .tab-button.active {
+            color: white;
+            border-bottom: 3px solid #f6ad55;
+            background: #4a5568;
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 2em;
+            border-bottom: 2px solid #f6ad55;
+            padding-bottom: 10px;
+        }
+
+        .card h3 {
+            color: #4a5568;
+            margin: 20px 0 10px 0;
+            font-size: 1.4em;
+        }
+
+        .card p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .image-container {
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-item {
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f7fafc;
+            border-left: 4px solid #f6ad55;
+            border-radius: 5px;
+        }
+
+        .timeline-item .year {
+            font-weight: bold;
+            color: #f6ad55;
+            font-size: 1.2em;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .gallery-item .caption {
+            padding: 15px;
+            background: white;
+            text-align: center;
+        }
+
+        .info-box {
+            background: #edf2f7;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #4299e1;
+        }
+
+        footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .tab-button {
+                padding: 15px 20px;
+                font-size: 0.9em;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Старая Кулатка</h1>
+        <p>История древнего татарского села Ульяновской области</p>
+    </header>
+
+    <nav class="tabs">
+        <button class="tab-button active" onclick="openTab(event, 'history')">История</button>
+        <button class="tab-button" onclick="openTab(event, 'landmarks')">Достопримечательности</button>
+        <button class="tab-button" onclick="openTab(event, 'culture')">Культура</button>
+        <button class="tab-button" onclick="openTab(event, 'gallery')">Галерея</button>
+    </nav>
+
+    <div class="content">
+        <!-- Вкладка История -->
+        <div id="history" class="tab-content active">
+            <div class="card">
+                <h2>История Старой Кулатки</h2>
+
+                <div class="image-container">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 600'%3E%3Crect fill='%23d4a574' width='1200' height='600'/%3E%3Ctext x='50%25' y='50%25' font-size='40' fill='white' text-anchor='middle' dominant-baseline='middle'%3EИсторический пейзаж села%3C/text%3E%3C/svg%3E" alt="Исторический пейзаж">
+                </div>
+
+                <p>Старая Кулатка — одно из старейших татарских сёл Ульяновской области, расположенное в Старокулаткинском районе. Село имеет богатую историю, уходящую корнями в глубину веков.</p>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <span class="year">XVII век</span>
+                        <p>Основание поселения татарскими переселенцами. Первые упоминания о селе в исторических документах.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="year">XVIII век</span>
+                        <p>Развитие сельского хозяйства и ремёсел. Строительство первых мечетей и общественных зданий.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="year">XIX век</span>
+                        <p>Расцвет села. Старая Кулатка становится важным торговым и культурным центром региона.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="year">XX век</span>
+                        <p>Советский период. Коллективизация, индустриализация. Сохранение культурных традиций.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="year">Современность</span>
+                        <p>Возрождение культурного наследия, развитие туризма, сохранение исторической памяти.</p>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>Интересный факт:</strong> Название села происходит от реки Кулатка, на берегах которой оно расположено. Приставка "Старая" появилась после основания Новой Кулатки.
+                </div>
+            </div>
+        </div>
+
+        <!-- Вкладка Достопримечательности -->
+        <div id="landmarks" class="tab-content">
+            <div class="card">
+                <h2>Достопримечательности</h2>
+
+                <div class="image-container">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 600'%3E%3Crect fill='%23667eea' width='1200' height='600'/%3E%3Ctext x='50%25' y='50%25' font-size='40' fill='white' text-anchor='middle' dominant-baseline='middle'%3EАрхитектурные памятники%3C/text%3E%3C/svg%3E" alt="Архитектура">
+                </div>
+
+                <h3>Исторические мечети</h3>
+                <p>Старая Кулатка славится своими историческими мечетями, которые являются памятниками архитектуры XVIII-XIX веков. Эти сооружения сочетают в себе элементы традиционного татарского и русского архитектурных стилей.</p>
+
+                <h3>Старинные дома</h3>
+                <p>В селе сохранились образцы традиционной татарской деревянной архитектуры с характерной резьбой и орнаментами. Многие дома украшены сложными узорами, отражающими культурные традиции народа.</p>
+
+                <h3>Мемориальные места</h3>
+                <p>На территории села расположены мемориалы, посвящённые участникам Великой Отечественной войны и выдающимся землякам.</p>
+
+                <div class="info-box">
+                    <strong>Совет туристам:</strong> Лучшее время для посещения — лето, когда можно насладиться не только историческими памятниками, но и живописной природой Поволжья.
+                </div>
+            </div>
+        </div>
+
+        <!-- Вкладка Культура -->
+        <div id="culture" class="tab-content">
+            <div class="card">
+                <h2>Культура и традиции</h2>
+
+                <div class="image-container">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 600'%3E%3Crect fill='%23f093fb' width='1200' height='600'/%3E%3Ctext x='50%25' y='50%25' font-size='40' fill='white' text-anchor='middle' dominant-baseline='middle'%3EКультурное наследие%3C/text%3E%3C/svg%3E" alt="Культура">
+                </div>
+
+                <h3>Народные промыслы</h3>
+                <p>Жители Старой Кулатки издавна славились мастерством в различных ремёслах: вышивке, резьбе по дереву, гончарном деле. Традиционные орнаменты и узоры передавались из поколения в поколение.</p>
+
+                <h3>Национальная кухня</h3>
+                <p>Татарская кухня Старой Кулатки богата традиционными блюдами: эчпочмак, чак-чак, губадия, балиш. Каждое блюдо имеет свою историю и готовится по старинным рецептам.</p>
+
+                <h3>Праздники и обряды</h3>
+                <p>В селе бережно хранятся традиции празднования Сабантуя, Курбан-байрама и других национальных праздников. Эти события сопровождаются народными играми, музыкой и танцами.</p>
+
+                <h3>Язык и литература</h3>
+                <p>Татарский язык является родным для большинства жителей села. В Старой Кулатке сохраняются традиции устного народного творчества: сказки, легенды, песни.</p>
+
+                <div class="info-box">
+                    <strong>Традиция:</strong> Сабантуй — праздник плуга, отмечаемый после завершения весенних полевых работ. Это один из самых ярких и любимых праздников татарского народа.
+                </div>
+            </div>
+        </div>
+
+        <!-- Вкладка Галерея -->
+        <div id="gallery" class="tab-content">
+            <div class="card">
+                <h2>Фотогалерея</h2>
+
+                <div class="gallery">
+                    <div class="gallery-item">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%2348bb78' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='white' text-anchor='middle' dominant-baseline='middle'%3EПрирода села%3C/text%3E%3C/svg%3E" alt="Природа">
+                        <div class="caption">Живописная природа окрестностей</div>
+                    </div>
+
+                    <div class="gallery-item">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23ed8936' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='white' text-anchor='middle' dominant-baseline='middle'%3EАрхитектура%3C/text%3E%3C/svg%3E" alt="Архитектура">
+                        <div class="caption">Традиционные деревянные дома</div>
+                    </div>
+
+                    <div class="gallery-item">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%239f7aea' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='white' text-anchor='middle' dominant-baseline='middle'%3EПраздники%3C/text%3E%3C/svg%3E" alt="Праздники">
+                        <div class="caption">Народные праздники и гуляния</div>
+                    </div>
+
+                    <div class="gallery-item">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23f56565' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='white' text-anchor='middle' dominant-baseline='middle'%3EРемёсла%3C/text%3E%3C/svg%3E" alt="Ремёсла">
+                        <div class="caption">Традиционные ремёсла</div>
+                    </div>
+
+                    <div class="gallery-item">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%234299e1' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='white' text-anchor='middle' dominant-baseline='middle'%3EМечеть%3C/text%3E%3C/svg%3E" alt="Мечеть">
+                        <div class="caption">Историческая мечеть</div>
+                    </div>
+
+                    <div class="gallery-item">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%2338b2ac' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='white' text-anchor='middle' dominant-baseline='middle'%3EПейзажи%3C/text%3E%3C/svg%3E" alt="Пейзажи">
+                        <div class="caption">Окрестности села</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Старая Кулатка. Сохраняем историю для будущих поколений.</p>
+    </footer>
+
+    <script>
+        function openTab(evt, tabName) {
+            // Скрыть все вкладки
+            var tabContents = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+
+            // Убрать активный класс со всех кнопок
+            var tabButtons = document.getElementsByClassName("tab-button");
+            for (var i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove("active");
+            }
+
+            // Показать выбранную вкладку и сделать кнопку активной
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Плавная прокрутка при загрузке
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            setTimeout(function() {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
